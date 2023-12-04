@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using System.Windows.Shapes;
+using System.Windows.Media.Animation;
 
 namespace kbProdProj
 {
@@ -21,10 +22,50 @@ namespace kbProdProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        public DispatcherTimer clock = new();
+        public DispatcherTimer dTimer = new DispatcherTimer();
+        private List<Vehicle> vehicles = new List<Vehicle>();
+        private Key keyDown = Key.None;
+        
         public MainWindow()
         {
             InitializeComponent();
+            dTimer.Tick += new EventHandler(dTimer_Tick);
+            dTimer.Interval = new TimeSpan(0, 0, 0, 0, 16);
+            AddEntities();
+            dTimer.Start();
+        }
+
+        private void dTimer_Tick(object sender, EventArgs e)
+        {
+            foreach (Vehicle v in vehicles)
+            {
+                v.Update();
+            }
+        }
+
+        private void AddEntities()
+        {
+            Vehicle v = new Vehicle(new int[] { 100, 100 }, new SolidColorBrush(Colors.Black), 0, true);
+            vehicles.Add(v);
+            CarGrid.Children.Add(v.self);
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            keyDown = e.Key;
+            if (vehicles[0].ovrrd)
+            {
+                if (keyDown == Key.Up) { vehicles[0].Accel(); }
+                else if (keyDown == Key.Down) { vehicles[0].Brake(); }
+                else if (keyDown == Key.Left) { vehicles[0].TurnLeft(); }
+                else if (keyDown == Key.Right) { vehicles[0].TurnRight(); }
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            keyDown = Key.None;
+            if (vehicles[0].ovrrd) { vehicles[0].Neutral(); }
         }
     }
 }
