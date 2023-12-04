@@ -13,11 +13,14 @@ namespace kbProdProj
     internal class Vehicle
     {
         public Rectangle self = new();
-        internal const double PI = Math.PI;
-        internal int[] velocity = new int[] { 0, 0 };
+        internal double[] velocity = new double[] { 0, 0 };
+        internal bool[] flags = new bool[8] { false, false,false,false,false,false,false,false }; // reversing, accel, brake, left, right, hazard, l_ind, r_ind
+        public bool ovrrd { get; }
+        public int Angle { get; set; } = 0;
 
-        public Vehicle(int[] c, Brush col, int type) 
+        public Vehicle(int[] c, Brush col, int type, bool o = false) 
         {
+            ovrrd = o;
             int[] size = new int[2];
             switch (type)
             {
@@ -48,9 +51,52 @@ namespace kbProdProj
             self.Height = s[1];
             self.Fill = col;
             self.StrokeThickness = 0;
-            self.HorizontalAlignment = HorizontalAlignment.Left;
-            self.VerticalAlignment = VerticalAlignment.Top;
+            self.HorizontalAlignment = HorizontalAlignment.Center;
+            self.VerticalAlignment = VerticalAlignment.Center;
 
         }
+
+        public void Update() {
+            double final = Math.Sqrt((velocity[0] * velocity[0]) + velocity[1] * velocity[1]);
+            int dAngle = 0;
+            // engine
+            if (flags[1]) {
+                final += 2;
+            } else if (flags[2])
+            {
+                final -= 2; // FIXME: deceleration is fine, but doesn't want to reverse!
+            }
+            // reduce final due to extra drag on turn
+            if (flags[3] || flags[4] && Math.Abs(final) > 2)
+            {
+                final /= 1.05;
+                // rotate vehicle
+                if (flags[3])
+                {
+                    dAngle = -2;
+                } else
+                {
+                    dAngle = 2;
+                }
+            }
+            // reduce final due to overall drag
+            final /= 1.15;
+            // transform angle
+            Angle += dAngle;
+            var tf = new RotateTransform(Angle, self.Width / 2, self.Height / 2);
+            // calc velocity using final
+            velocity[0] = 0 - Math.Round(final * Math.Sin(VehicleHelper.ConvertAngle(Angle)));
+            velocity[1] = Math.Round(final * Math.Cos(VehicleHelper.ConvertAngle(Angle)));
+            // transform velocity
+            self.Margin = new Thickness(self.Margin.Left + velocity[0], self.Margin.Top + velocity[1],0,0);
+            // transform final
+            self.RenderTransform = tf;
+        }
+
+        public void TurnLeft() { flags[3] = true; flags[4] = false; } 
+        public void TurnRight() { flags[4] = true; flags[3] = false; } 
+        public void Accel() { flags[1] = true; flags[2] = false; } 
+        public void Brake() { flags[2] = true; flags[1] = false; }
+        public void Neutral() { flags[1] = flags[2] = flags[3] = flags[4] = false; }
     }
 }
