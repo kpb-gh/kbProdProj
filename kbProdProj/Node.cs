@@ -9,29 +9,30 @@ namespace kbProdProj
 {
     class Node
     {
-        private long id { get; set; } // id=0 is reserved for dead ends
+        private long id { get; } // id=0 is reserved for dead ends
         private long x { get; }
         private long y { get; }
-        private List<Target> targets { get; } = new List<Target>();
-        public Node(Target self, Target target)
+        private bool active { get; set; }
+        private List<Node> targets { get; } = new List<Node>();
+        public Node(Node self, Node target)
         {
             id = self.id;
             x = self.x;
             y = self.y;
             addTarget(target);
         }
-        public Node(Target self, Target[] target)
+        public Node(Node self, Node[] target)
         {
             id = self.id;
             x = self.x;
             y = self.y;
-            foreach (Target t in target)
+            foreach (Node t in target)
             {
                 addTarget(t);
             }
         }
 
-        public void addTarget(Target target)
+        public void addTarget(Node target)
         {
             if (target.id == id) { throw new ArgumentException($"Failure to add id={id}. Cannot add self."); }
             targets.Add(target);
