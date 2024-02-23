@@ -9,11 +9,11 @@ namespace kbProdProj
 {
     class Node
     {
-        private long id { get; } // id=0 is reserved for dead ends
+        public long id { get; } // id=0 is reserved for dead ends
         private long x { get; }
         private long y { get; }
-        private bool active { get; set; }
-        private List<Node> targets { get; } = new List<Node>();
+        public bool active { get; set; }
+        public List<Node> targets { get; } = new List<Node>();
         public Node(Node self, Node target)
         {
             id = self.id;
