@@ -3,34 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace kbProdProj
 {
     class Node
     {
         private long id { get; set; } // id=0 is reserved for dead ends
-        private List<long> targets { get; }
-        private bool oneWay { get; set; }
-        public Node(long id, long target)
+        private long x { get; }
+        private long y { get; }
+        private List<Target> targets { get; } = new List<Target>();
+        public Node(Target self, Target target)
         {
-            this.id = id;
-            targets = new List<long>();
+            id = self.id;
+            x = self.x;
+            y = self.y;
             addTarget(target);
         }
-        public Node(long id, long[] target)
+        public Node(Target self, Target[] target)
         {
-            this.id = id;
-            targets = new List<long>();
-            foreach (long tid in target)
+            id = self.id;
+            x = self.x;
+            y = self.y;
+            foreach (Target t in target)
             {
-                addTarget(tid);
+                addTarget(t);
             }
         }
 
-        public void addTarget(long tid)
+        public void addTarget(Target target)
         {
-            if (tid == id) { throw new ArgumentException($"Failure to add id={id}. Cannot add self."); }
-            targets.Add(tid);
+            if (target.id == id) { throw new ArgumentException($"Failure to add id={id}. Cannot add self."); }
+            targets.Add(target);
         }
     }
 }
