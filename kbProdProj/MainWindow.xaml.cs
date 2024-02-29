@@ -24,6 +24,7 @@ namespace kbProdProj
     {
         public DispatcherTimer dTimer = new DispatcherTimer();
         private List<Vehicle> vehicles = new List<Vehicle>();
+        private List<Node> nodes = MapLoader.GetNodesFromFile();
         private Key keyDown = Key.None;
         
         public MainWindow()
@@ -45,9 +46,15 @@ namespace kbProdProj
 
         private void AddEntities()
         {
+            // region 1 - add vehicles
             Vehicle v = new Vehicle(new int[] { 100, 100 }, new SolidColorBrush(Colors.Black), 0, true);
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);
+            // region 2 - add nodes
+            foreach (var obj in nodes)
+            {
+                // CarGrid.Children.Add(obj.)
+            }
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)

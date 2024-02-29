@@ -13,10 +13,10 @@ namespace kbProdProj
     {
         public static List<Node> GetNodesFromFile(string path = "list.nodes")
         {
-            List<Node> nodes = new List<Node>();
+            List<Node> nodes = new List<Node> { new Node(0, 0, 0) };
             using (StreamReader sr = new StreamReader(path))
             {
-                for (int i = 0; !sr.EndOfStream; i++)
+                for (int i = 1; !sr.EndOfStream; i++)
                 {
                     string[] line = sr.ReadLine().Split(",");
                     if (line != null && line.Length > 0) {
@@ -24,6 +24,7 @@ namespace kbProdProj
                     }
                 }
             }
+            nodes[0].addTarget(nodes[1]);
             return nodes;
         }
 
