@@ -14,27 +14,28 @@ namespace kbProdProj
         private long y { get; }
         public bool active { get; set; }
         public List<Node> targets { get; } = new List<Node>();
-        public Node(Node self, Node target)
+        public Node(long id, long x, long y, Node target)
         {
-            id = self.id;
-            x = self.x;
-            y = self.y;
+            this.id = id;
+            this.x = x;
+            this.y = y;
             addTarget(target);
         }
-        public Node(Node self, Node[] target)
+        public Node(long id, long x, long y, List<Node> target)
         {
-            id = self.id;
-            x = self.x;
-            y = self.y;
+            this.id = id;
+            this.x = x;
+            this.y = y;
             foreach (Node t in target)
             {
                 addTarget(t);
             }
         }
-        public Node(Node target)
+        public Node(long id, long x, long y)
         {
-            id = 0; x = 0; y = 0; 
-            addTarget(target);
+            this.id = id;
+            this.x = x;
+            this.y = y;
         }
 
         public void addTarget(Node target)
