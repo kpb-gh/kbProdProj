@@ -9,7 +9,7 @@ namespace kbProdProj
 {
     class Node
     {
-        public long id { get; } // id=0 is reserved for dead ends
+        public long id { get; } // id=0 is reserved for root node
         private long x { get; }
         private long y { get; }
         public bool active { get; set; }
@@ -30,6 +30,11 @@ namespace kbProdProj
             {
                 addTarget(t);
             }
+        }
+        public Node(Node target)
+        {
+            id = 0; x = 0; y = 0; 
+            addTarget(target);
         }
 
         public void addTarget(Node target)
