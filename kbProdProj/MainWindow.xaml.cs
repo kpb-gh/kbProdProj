@@ -53,7 +53,7 @@ namespace kbProdProj
             // region 2 - add nodes
             foreach (var obj in nodes)
             {
-                // CarGrid.Children.Add(obj.)
+                CarGrid.Children.Add(obj.self);
             }
         }
 

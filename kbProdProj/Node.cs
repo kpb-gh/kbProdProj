@@ -1,27 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Shapes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Media;
+using System.Windows;
 
 namespace kbProdProj
 {
     class Node
     {
+        public Rectangle self = new();
         public long id { get; } // id=0 is reserved for root node
-        private long x { get; }
-        private long y { get; }
+        private int x { get; }
+        private int y { get; }
         public bool active { get; set; }
         public List<Node> targets { get; } = new List<Node>();
-        public Node(long id, long x, long y, Node target)
+        public Node(long id, int x, int y, Node target)
         {
             this.id = id;
-            this.x = x;
-            this.y = y;
+            this.x = x; this.y = y;
+            Initialise();
             addTarget(target);
         }
-        public Node(long id, long x, long y, List<Node> target)
+
+        private void Initialise()
+        {
+            self.Margin = new Thickness(x,y, 0, 0); 
+            self.Width = self.Height = 30;
+            self.Stroke = new SolidColorBrush(Colors.Black);
+            self.StrokeThickness = 1;
+            self.Fill = new SolidColorBrush(Colors.Black);
+            self.HorizontalAlignment = HorizontalAlignment.Center;
+            self.VerticalAlignment = VerticalAlignment.Center;
+
+        }
+
+        public Node(long id, int x, int y, List<Node> target)
         {
             this.id = id;
             this.x = x;
@@ -31,7 +48,7 @@ namespace kbProdProj
                 addTarget(t);
             }
         }
-        public Node(long id, long x, long y)
+        public Node(long id, int x, int y)
         {
             this.id = id;
             this.x = x;

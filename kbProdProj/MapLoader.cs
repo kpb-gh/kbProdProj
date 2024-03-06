@@ -14,23 +14,27 @@ namespace kbProdProj
         public static List<Node> GetNodesFromFile(string path = "list.nodes")
         {
             List<Node> nodes = new List<Node> { new Node(0, 0, 0) };
-            using (StreamReader sr = new StreamReader(path))
+            try
             {
-                for (int i = 1; !sr.EndOfStream; i++)
+                using (StreamReader sr = new StreamReader(path))
                 {
-                    string[] line = sr.ReadLine().Split(",");
-                    if (line != null && line.Length > 0) {
-                        nodes.Add(CreateNode(i, line, nodes));
+                    for (int i = 1; !sr.EndOfStream; i++)
+                    {
+                        string[] line = sr.ReadLine().Split(",");
+                        if (line != null && line.Length > 0)
+                        {
+                            nodes.Add(CreateNode(i, line, nodes));
+                        }
                     }
                 }
-            }
+            } catch (FileNotFoundException ex) { throw new FileNotFoundException($"File not found: {path}.", ex); }
             nodes[0].addTarget(nodes[1]);
             return nodes;
         }
 
         private static Node CreateNode(long id, string[] line, List<Node> nodes)
         {
-            long x = long.Parse(line[0]); long y = long.Parse(line[1]);
+            int x = int.Parse(line[0]); int y = int.Parse(line[1]);
             return new Node(id, x, y, GetTargetsFromLine(line, nodes));
         }
 
