@@ -18,21 +18,14 @@ namespace kbProdProj
         private int y { get; }
         public bool active { get; set; }
         public List<Node> targets { get; } = new List<Node>();
-        public Node(long id, int x, int y, Node target)
-        {
-            this.id = id;
-            this.x = x; this.y = y;
-            Initialise();
-            addTarget(target);
-        }
 
         private void Initialise()
         {
-            self.Margin = new Thickness(x,y, 0, 0); 
-            self.Width = self.Height = 30;
+            self.Margin = new Thickness(x,y, 0, 0);
+            self.Width = 30; self.Height = 30;
+            self.Fill = new SolidColorBrush(Colors.Transparent);
+            self.StrokeThickness = 0.1;
             self.Stroke = new SolidColorBrush(Colors.Black);
-            self.StrokeThickness = 1;
-            self.Fill = new SolidColorBrush(Colors.Black);
             self.HorizontalAlignment = HorizontalAlignment.Center;
             self.VerticalAlignment = VerticalAlignment.Center;
 
@@ -41,8 +34,8 @@ namespace kbProdProj
         public Node(long id, int x, int y, List<Node> target)
         {
             this.id = id;
-            this.x = x;
-            this.y = y;
+            this.x = (x * 4) - 300; this.y = (y * 4) - 300;
+            Initialise();
             foreach (Node t in target)
             {
                 addTarget(t);
@@ -51,8 +44,8 @@ namespace kbProdProj
         public Node(long id, int x, int y)
         {
             this.id = id;
-            this.x = x;
-            this.y = y;
+            this.x = (x * 4) - 300; this.y = (y * 4) - 300;
+            Initialise();
         }
 
         public void addTarget(Node target)

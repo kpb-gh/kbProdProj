@@ -47,7 +47,7 @@ namespace kbProdProj
         private void AddEntities()
         {
             // region 1 - add vehicles
-            Vehicle v = new Vehicle(new int[] { 100, 100 }, new SolidColorBrush(Colors.Black), 0, true);
+            Vehicle v = new Vehicle(new int[] { -300, -300 }, new SolidColorBrush(Colors.Black), 0, true);
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);
             // region 2 - add nodes

@@ -64,23 +64,24 @@ namespace kbProdProj
                 final += 2;
             } else if (flags[2])
             {
-                final -= 2; // FIXME: deceleration is fine, but doesn't want to reverse!
+                if (Math.Abs(final) <= 2) { final = 0; }
+                else { final -= 2; } 
             }
             // reduce final due to extra drag on turn
-            if (flags[3] || flags[4] && Math.Abs(final) > 2)
+            if ((flags[3] || flags[4]) && Math.Abs(final) > 0.2)
             {
-                final /= 1.05;
+                final /= 1.01;
                 // rotate vehicle
                 if (flags[3])
                 {
                     dAngle = -2;
-                } else
+                } if (flags[4])
                 {
                     dAngle = 2;
                 }
             }
             // reduce final due to overall drag
-            final /= 1.15;
+            final /= 1.05;
             // transform angle
             Angle += dAngle;
             var tf = new RotateTransform(Angle, self.Width / 2, self.Height / 2);
