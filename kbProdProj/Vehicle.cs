@@ -15,6 +15,9 @@ namespace kbProdProj
         public Rectangle self = new();
         internal double[] velocity = new double[] { 0, 0 };
         internal bool[] flags = new bool[8] { false, false,false,false,false,false,false,false }; // reversing, accel, brake, left, right, hazard, l_ind, r_ind
+        public int TurnRate { get; } = 2;
+        public int PwrRate { get; } = 2;
+        public int MaxSpeed { get; } = 30;
         public bool ovrrd { get; }
         public int Angle { get; set; } = 0;
 
@@ -61,11 +64,11 @@ namespace kbProdProj
             int dAngle = 0;
             // engine
             if (flags[1]) {
-                final += 2;
+                final += PwrRate;
             } else if (flags[2])
             {
-                if (Math.Abs(final) <= 2) { final = 0; }
-                else { final -= 2; } 
+                if (Math.Abs(final) <= PwrRate) { final = 0; }
+                else { final -= PwrRate; } 
             }
             // reduce final due to extra drag on turn
             if ((flags[3] || flags[4]) && Math.Abs(final) > 0.2)
@@ -74,10 +77,10 @@ namespace kbProdProj
                 // rotate vehicle
                 if (flags[3])
                 {
-                    dAngle = -2;
+                    dAngle = -TurnRate;
                 } if (flags[4])
                 {
-                    dAngle = 2;
+                    dAngle = TurnRate;
                 }
             }
             // reduce final due to overall drag
