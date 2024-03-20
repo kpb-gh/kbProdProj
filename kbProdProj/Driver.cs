@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace kbProdProj
 {
-    internal static class Driver
+    internal static class DriverMath
     {
         internal static int Time_TurnToTarget(Node tn, Vehicle v)
         {
@@ -23,10 +23,48 @@ namespace kbProdProj
             if (result < 0) { result += 360; }
             return (result / v.TurnRate);
         }
-        internal static int Time_Brake(Node tn, Vehicle v)
+        internal static int Time_Brake(Vehicle v)
         {
             int final = (int)(Math.Sqrt((v.velocity[0] * v.velocity[0]) + v.velocity[1] * v.velocity[1]));
             return (final - 2) / v.PwrRate;
+        }
+    }
+
+    internal class Driver {
+        private Vehicle vehicle;
+        private List<Node> route { get; set; }
+        private Node tn { get; set; }
+
+        public Driver(Vehicle vehicle, List<Node> route, Node tn)
+        {
+            this.vehicle = vehicle;
+            this.route = route;
+            this.tn = tn;
+        }
+
+        public void DriveAI()
+        {
+            if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) > 10 || (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) > 10))
+            {
+                route.RemoveAt(0);
+                if (route.Count > 0) { tn = route[0]; }
+                else 
+                {
+                    vehicle.Brake();
+                    return;
+                }
+            }
+            else
+            {
+                if (true) // temp
+                {
+                    vehicle.Brake();
+                }
+                else if (DriverMath.Time_Brake(vehicle) > 60 && vehicle.flags[1])
+                {
+                    vehicle.Neutral();
+                }
+            }
         }
     }
 }
