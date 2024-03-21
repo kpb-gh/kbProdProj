@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,29 @@ namespace kbProdProj
         internal static int Time_ReachNode(Node tn, Vehicle v)
         {
             return (int)(v.velocity[0] / Math.Abs(v.self.Margin.Left - tn.self.Margin.Left));
+        }
+
+        internal static List<Node>? FindRoute(Node tn, Node cn, List<Node>? route = null, List<Node>? deadNodes = null)
+        {
+            if (route == null) { route = new List<Node> { cn }; }
+            else { route.Add(cn); }
+            if (deadNodes == null) { deadNodes = new List<Node> { }; }
+            else if (deadNodes.Contains(cn)) { return null; }
+            if (cn == tn) { return route; }
+            else
+            {
+                foreach (var node in cn.targets)
+                {
+                    Debug.WriteLine($"Investigating {node.id}");
+                    route = FindRoute(tn, node, route, deadNodes);
+                    if (route == null)
+                    {
+                        deadNodes.Add(node);
+                        continue;
+                    } 
+                }
+                return route;
+            }
         }
     }
 

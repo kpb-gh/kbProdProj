@@ -35,7 +35,7 @@ namespace kbProdProj
         private static Node CreateNode(long id, string[] line, List<Node> nodes)
         {
             int x = int.Parse(line[0]); int y = int.Parse(line[1]);
-            return new Node(id, x, y, GetTargetsFromLine(line, nodes));
+            return new Node(id, x*3, y*3, GetTargetsFromLine(line, nodes));
         }
 
         private static List<Node> GetTargetsFromLine(string[] line, List<Node> nodes)
