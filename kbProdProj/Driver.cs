@@ -20,13 +20,17 @@ namespace kbProdProj
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
                     Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)
                 * Math.PI);
-            if (result < 0) { result += 360; }
-            return (result / v.TurnRate);
+            return (v.Angle - result) / v.TurnRate;
         }
         internal static int Time_Brake(Vehicle v)
         {
             int final = (int)(Math.Sqrt((v.velocity[0] * v.velocity[0]) + v.velocity[1] * v.velocity[1]));
             return (final - 2) / v.PwrRate;
+        }
+
+        internal static int Time_ReachNode(Node tn, Vehicle v)
+        {
+            return (int)(v.velocity[0] / Math.Abs(v.self.Margin.Left - tn.self.Margin.Left));
         }
     }
 
@@ -44,6 +48,7 @@ namespace kbProdProj
 
         public void DriveAI()
         {
+            int velo = (int)Math.Sqrt((vehicle.velocity[0] * vehicle.velocity[0]) + (vehicle.velocity[1] * vehicle.velocity[1]));
             if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) > 10 || (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) > 10))
             {
                 route.RemoveAt(0);
@@ -56,13 +61,19 @@ namespace kbProdProj
             }
             else
             {
-                if (true) // temp
+                if (DriverMath.Time_ReachNode(tn, vehicle) - (vehicle.MaxSpeed / vehicle.PwrRate) < 5 && Math.Abs(velo - vehicle.MaxSpeed) < vehicle.MaxSpeed / 10)
                 {
                     vehicle.Brake();
                 }
                 else if (DriverMath.Time_Brake(vehicle) > 60 && vehicle.flags[1])
                 {
                     vehicle.Neutral();
+                }
+                int t = DriverMath.Time_TurnToTarget(tn, vehicle);
+                if (Math.Abs(t) > 2)
+                {
+                    if (t < 0) { vehicle.TurnLeft(); }
+                    else { vehicle.TurnRight(); }
                 }
             }
         }
