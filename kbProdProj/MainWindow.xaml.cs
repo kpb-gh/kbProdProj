@@ -46,15 +46,16 @@ namespace kbProdProj
 
         private void AddEntities()
         {
-            // region 1 - add vehicles
-            Vehicle v = new Vehicle(new int[] { -300, -300 }, new SolidColorBrush(Colors.Black), 0, true);
-            vehicles.Add(v);
-            CarGrid.Children.Add(v.self);
-            // region 2 - add nodes
+            // region 1 - add nodes
             foreach (var obj in nodes)
             {
                 CarGrid.Children.Add(obj.self);
             }
+            // region 2 - add vehicles
+            Vehicle v = new Vehicle(new int[] { (int)nodes[0].self.Margin.Left, (int)nodes[0].self.Margin.Top }, new SolidColorBrush(Colors.Black), 0, true);
+            v.Angle = DriverMath.Angle_ToNode(nodes[1],v); // spawn facing a valid route
+            vehicles.Add(v);
+            CarGrid.Children.Add(v.self);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)

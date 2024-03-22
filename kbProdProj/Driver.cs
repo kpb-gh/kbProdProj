@@ -10,7 +10,7 @@ namespace kbProdProj
 {
     internal static class DriverMath
     {
-        internal static int Time_TurnToTarget(Node tn, Vehicle v)
+        internal static int Angle_ToNode(Node tn, Vehicle v)
         {
             if (tn == null || v == null) return 0;
             Point[] points = new Point[3] { 
@@ -21,7 +21,12 @@ namespace kbProdProj
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
                     Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)
                 * Math.PI);
-            return (v.Angle - result) / v.TurnRate;
+            return result;
+        }
+
+        internal static int Time_TurnToTarget(Node tn, Vehicle v)
+        {
+            return (v.Angle - Angle_ToNode(tn,v)) / v.TurnRate;
         }
         internal static int Time_Brake(Vehicle v)
         {
@@ -63,10 +68,14 @@ namespace kbProdProj
         private List<Node> route { get; set; }
         private Node tn { get; set; }
 
-        public Driver(Vehicle vehicle, List<Node> route, Node tn)
+        public Driver(Vehicle vehicle, Node sn, Node tn)
         {
             this.vehicle = vehicle;
-            this.route = route;
+            route = DriverMath.FindRoute(tn, sn);
+            if (route == null)
+            {
+                route = new List<Node> { sn };
+            }
             this.tn = tn;
         }
 
