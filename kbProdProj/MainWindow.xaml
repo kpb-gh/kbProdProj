@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:kbProdProj"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+        Title="MainWindow" Height="900" Width="1600" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Grid x:Name="CarGrid">
-        
+        <TextBox x:Name="tNodeBox" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="72" MaxLines="1" TextChanged="tNodeBox_TextChanged"/>
+        <TextBox x:Name="tVehicleBox" HorizontalAlignment="Left" Margin="10,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="72" MaxLines="1" TextChanged="tVehicleBox_TextChanged"/>
+        <Button x:Name="btn_rtExecute" Content="Execute" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Width="72" Click="Button_Click"/>
+        <Label x:Name="tNodeLab" Content="Node ID" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Foreground="#7F000000"/>
+        <Label x:Name="tVehicleLab" Content="Vehicle ID" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Foreground="#7F000000"/>
+        <Label x:Name="errLab" Content="Label" HorizontalAlignment="Left" Margin="87,10,0,0" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Visibility="Hidden"/>
     </Grid>
 </Window>

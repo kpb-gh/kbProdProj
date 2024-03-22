@@ -20,11 +20,12 @@ namespace kbProdProj
         public int MaxSpeed { get; } = 30;
         public bool ovrrd { get; }
         public int Angle { get; set; } = 0;
+        public Node? CurrentLocation { get; set; }
 
         public Vehicle(int[] c, Brush col, int type, bool o = false) 
         {
             ovrrd = o;
-            int[] size = new int[2];
+            int[] size;
             switch (type)
             {
                 case 0:

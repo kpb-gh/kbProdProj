@@ -34,7 +34,7 @@ namespace kbProdProj
         public Node(long id, int x, int y, List<Node> target)
         {
             this.id = id;
-            this.x = (x * 4) - 300; this.y = (y * 4) - 300;
+            this.x = (x * 4); this.y = (y * 4);
             Initialise();
             foreach (Node t in target)
             {
@@ -44,7 +44,7 @@ namespace kbProdProj
         public Node(long id, int x, int y)
         {
             this.id = id;
-            this.x = (x * 4) - 300; this.y = (y * 4) - 300;
+            this.x = (x * 4); this.y = (y * 4);
             Initialise();
         }
 

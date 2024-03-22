@@ -25,6 +25,7 @@ namespace kbProdProj
         public DispatcherTimer dTimer = new DispatcherTimer();
         private List<Vehicle> vehicles = new List<Vehicle>();
         private List<Node> nodes = MapLoader.GetNodesFromFile();
+        private List<Driver> drivers = new List<Driver>();
         private Key keyDown = Key.None;
         
         public MainWindow()
@@ -38,6 +39,10 @@ namespace kbProdProj
 
         private void dTimer_Tick(object sender, EventArgs e)
         {
+            foreach (Driver d in drivers)
+            {
+                d.DriveAI();
+            }
             foreach (Vehicle v in vehicles)
             {
                 v.Update();
@@ -52,8 +57,9 @@ namespace kbProdProj
                 CarGrid.Children.Add(obj.self);
             }
             // region 2 - add vehicles
-            Vehicle v = new Vehicle(new int[] { (int)nodes[0].self.Margin.Left, (int)nodes[0].self.Margin.Top }, new SolidColorBrush(Colors.Black), 0, true);
+            Vehicle v = new Vehicle(new int[] { (int)nodes[0].self.Margin.Left, (int)nodes[0].self.Margin.Top }, new SolidColorBrush(Colors.Black), 0);
             v.Angle = DriverMath.Angle_ToNode(nodes[1],v); // spawn facing a valid route
+            v.CurrentLocation = nodes[0];
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);
         }
@@ -74,6 +80,61 @@ namespace kbProdProj
         {
             keyDown = Key.None;
             if (vehicles[0].ovrrd) { vehicles[0].Neutral(); }
+        }
+
+        private void tNodeBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tNodeBox.Text == "")
+            {
+                tNodeLab.Visibility = Visibility.Visible;
+            } else
+            {
+                tNodeLab.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void tVehicleBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tVehicleBox.Text == "")
+            {
+                tVehicleLab.Visibility = Visibility.Visible;
+            } else
+            {
+                tVehicleLab.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            errLab.Visibility = Visibility.Hidden;
+            bool flag = false;
+            int v, n = 0;
+            if (!(int.TryParse(tVehicleBox.Text, out v) && int.TryParse(tNodeBox.Text, out n)))
+            {
+                errLab.Visibility = Visibility.Visible;
+                errLab.Content = "Ensure both boxes only have numerical IDs";
+                return;
+            }
+            foreach (var i in nodes)
+            {
+                if (i.id == n) { flag = true; break; }
+            }
+            if (!flag)
+            {
+                errLab.Visibility = Visibility.Visible;
+                errLab.Content = "Node ID does not correspond to real node";
+                return;
+            }
+            else if (vehicles.Count <= v)
+            {
+                errLab.Visibility = Visibility.Visible;
+                errLab.Content = "Vehicle ID does not correspond to real vehicle";
+                return;
+            }
+            else
+            {
+                Driver d = new Driver(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n));
+            }
         }
     }
 }
