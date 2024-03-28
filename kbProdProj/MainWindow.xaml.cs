@@ -39,13 +39,21 @@ namespace kbProdProj
 
         private void dTimer_Tick(object sender, EventArgs e)
         {
+            List<Driver> doneDrivers = new List<Driver>();
             foreach (Driver d in drivers)
             {
-                d.DriveAI();
+                if (d.DriveAI())
+                {
+                    doneDrivers.Add(d);
+                }
             }
             foreach (Vehicle v in vehicles)
             {
                 v.Update();
+            }
+            foreach (Driver item in doneDrivers)
+            {
+                drivers.Remove(item);
             }
         }
 
@@ -62,6 +70,9 @@ namespace kbProdProj
             v.CurrentLocation = nodes[0];
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);
+            // temp - add driver
+            Driver d = new Driver(vehicles[0], vehicles[0].CurrentLocation, nodes[3]);
+            drivers.Add(d);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -134,6 +145,7 @@ namespace kbProdProj
             else
             {
                 Driver d = new Driver(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n));
+                drivers.Add(d);
             }
         }
     }

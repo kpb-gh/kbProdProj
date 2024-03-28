@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace kbProdProj
 {
@@ -31,7 +32,12 @@ namespace kbProdProj
         internal static int Time_Brake(Vehicle v)
         {
             int final = (int)(Math.Sqrt((v.velocity[0] * v.velocity[0]) + v.velocity[1] * v.velocity[1]));
-            return (final - 2) / v.PwrRate;
+            return (final / v.PwrRate) - 1;
+        }
+
+        internal static int Time_MaxBrake(Vehicle v)
+        {
+            return (v.MaxSpeed / v.PwrRate) - 1;
         }
 
         internal static int Time_ReachNode(Node tn, Vehicle v)
@@ -50,6 +56,12 @@ namespace kbProdProj
             {
                 foreach (var node in cn.targets)
                 {
+                    bool flag = false;
+                    foreach (Node visited in route)
+                    {
+                        if (visited.id == node.id) { flag = true; break; }
+                    }
+                    if (flag) { continue; }
                     Debug.WriteLine($"Investigating {node.id}");
                     route = FindRoute(tn, node, route, deadNodes);
                     if (route == null)
@@ -79,36 +91,52 @@ namespace kbProdProj
             this.tn = tn;
         }
 
-        public void DriveAI()
+        public bool DriveAI()
         {
+            Debug.WriteLine($"DriveAI_{GetHashCode()}: Navigation to {tn.id}");
+            if (route.Count == 0) 
+            {
+                Debug.WriteLine($"DriveAI_{GetHashCode()}: Done arrival.");
+                return true; 
+            }
             int velo = (int)Math.Sqrt((vehicle.velocity[0] * vehicle.velocity[0]) + (vehicle.velocity[1] * vehicle.velocity[1]));
-            if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) > 10 || (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) > 10))
+            if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 10 || (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10))
             {
                 route.RemoveAt(0);
-                if (route.Count > 0) { tn = route[0]; }
+                if (route.Count > 0) 
+                {
+                    tn = route[0];
+                    Debug.WriteLine($"DriveAI_{GetHashCode()}: New target: {tn.id}");
+                }
                 else 
                 {
+                    Debug.WriteLine($"DriveAI_{GetHashCode()}: Done proximity.");
                     vehicle.Brake();
-                    return;
+                    return true;
                 }
             }
             else
             {
                 if (DriverMath.Time_ReachNode(tn, vehicle) - (vehicle.MaxSpeed / vehicle.PwrRate) < 5 && Math.Abs(velo - vehicle.MaxSpeed) < vehicle.MaxSpeed / 10)
                 {
+                    Debug.WriteLine($"DriveAI_{GetHashCode()}: Braking.");
                     vehicle.Brake();
                 }
-                else if (DriverMath.Time_Brake(vehicle) > 60 && vehicle.flags[1])
+                else if (DriverMath.Time_MaxBrake(vehicle) > DriverMath.Time_ReachNode(tn, vehicle) + 10)
                 {
-                    vehicle.Neutral();
+                    Debug.WriteLine($"DriveAI_{GetHashCode()}: Accelerating.");
+                    vehicle.Accel();
                 }
                 int t = DriverMath.Time_TurnToTarget(tn, vehicle);
                 if (Math.Abs(t) > 2)
                 {
-                    if (t < 0) { vehicle.TurnLeft(); }
-                    else { vehicle.TurnRight(); }
+                    if (Math.Abs(t) > 5 && vehicle.flags[1]) { vehicle.Neutral(); }
+                    if (t < 0) { Debug.WriteLine($"DriveAI_{GetHashCode()}: Left."); vehicle.TurnLeft(); }
+                    else { Debug.WriteLine($"DriveAI_{GetHashCode()}: Right."); vehicle.TurnRight(); }
                 }
             }
+            Debug.WriteLine($"DriveAI_{GetHashCode()}: Ongoing.");
+            return false;
         }
     }
 }
