@@ -70,9 +70,6 @@ namespace kbProdProj
             v.CurrentLocation = nodes[0];
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);
-            // temp - add driver
-            Driver d = new Driver(vehicles[0], vehicles[0].CurrentLocation, nodes[3]);
-            drivers.Add(d);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
