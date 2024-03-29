@@ -93,6 +93,9 @@ namespace kbProdProj
 
         public void DieSafely()
         {
+            /// <summary>
+            ///     Neutralises vehicle steering and forces it to stop. To be used before Driver is killed.
+            /// </summary>
             Debug.WriteLine($"DriveAI_{GetHashCode()}: Dying safely.");
             vehicle.Neutral();
             vehicle.Brake();
@@ -100,7 +103,10 @@ namespace kbProdProj
 
         public bool DriveAI()
         {
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Navigation to {tn.id}");
+            /// <summary>
+            ///     Controls the Driver's assigned Vehicle automatically. Returns true when done, otherwise returns false.
+            /// </summary>
+            Debug.WriteLine($"DriveAI_{GetHashCode()}: Navigation to {tn.id}. Final: {route[^1].id}");
             if (route.Count == 0) 
             {
                 Debug.WriteLine($"DriveAI_{GetHashCode()}: Done arrival.");
@@ -124,6 +130,17 @@ namespace kbProdProj
             }
             else
             {
+                int t = DriverMath.Time_TurnToTarget(tn, vehicle);
+                if (Math.Abs(t) > 2)
+                {
+                    if (Math.Abs(t) > 5 && vehicle.flags[1]) { vehicle.Neutral(); }
+                    if (t < 0) { Debug.WriteLine($"DriveAI_{GetHashCode()}: Left."); vehicle.TurnLeft(); }
+                    else { Debug.WriteLine($"DriveAI_{GetHashCode()}: Right."); vehicle.TurnRight(); }
+                } else
+                {
+                    Debug.WriteLine($"DriveAI_{GetHashCode()}: Neutral.");
+                    vehicle.Neutral();
+                }
                 if (DriverMath.Time_ReachNode(tn, vehicle) - (vehicle.MaxSpeed / vehicle.PwrRate) < 5 && Math.Abs(velo - vehicle.MaxSpeed) < vehicle.MaxSpeed / 10)
                 {
                     Debug.WriteLine($"DriveAI_{GetHashCode()}: Braking.");
@@ -133,13 +150,6 @@ namespace kbProdProj
                 {
                     Debug.WriteLine($"DriveAI_{GetHashCode()}: Accelerating.");
                     vehicle.Accel();
-                }
-                int t = DriverMath.Time_TurnToTarget(tn, vehicle);
-                if (Math.Abs(t) > 2)
-                {
-                    if (Math.Abs(t) > 5 && vehicle.flags[1]) { vehicle.Neutral(); }
-                    if (t < 0) { Debug.WriteLine($"DriveAI_{GetHashCode()}: Left."); vehicle.TurnLeft(); }
-                    else { Debug.WriteLine($"DriveAI_{GetHashCode()}: Right."); vehicle.TurnRight(); }
                 }
             }
             Debug.WriteLine($"DriveAI_{GetHashCode()}: Ongoing.");
