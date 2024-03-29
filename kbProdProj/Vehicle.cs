@@ -17,7 +17,7 @@ namespace kbProdProj
         internal bool[] flags = new bool[8] { false, false,false,false,false,false,false,false }; // reversing, accel, brake, left, right, hazard, l_ind, r_ind
         public int TurnRate { get; } = 2;
         public int PwrRate { get; } = 2;
-        public int MaxSpeed { get; } = 30;
+        public int MaxSpeed { get; } = 10;
         public bool ovrrd { get; }
         public int Angle { get; set; } = 0;
         public Node? CurrentLocation { get; set; }
@@ -64,7 +64,7 @@ namespace kbProdProj
             double final = Math.Sqrt((velocity[0] * velocity[0]) + velocity[1] * velocity[1]);
             int dAngle = 0;
             // engine
-            if (flags[1]) {
+            if (flags[1] && final < MaxSpeed) {
                 final += PwrRate;
             } else if (flags[2])
             {

@@ -113,7 +113,7 @@ namespace kbProdProj
                 return true; 
             }
             int velo = (int)Math.Sqrt((vehicle.velocity[0] * vehicle.velocity[0]) + (vehicle.velocity[1] * vehicle.velocity[1]));
-            if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 10 || (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10))
+            if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 3 && (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 3))
             {
                 route.RemoveAt(0);
                 if (route.Count > 0) 
@@ -123,7 +123,10 @@ namespace kbProdProj
                 }
                 else 
                 {
-                    Debug.WriteLine($"DriveAI_{GetHashCode()}: Done proximity.");
+                    Debug.WriteLine(
+                        $"DriveAI_{GetHashCode()}: Done proximity.\n" +
+                        $"Coords (v): {vehicle.self.Margin.Left}/{vehicle.self.Margin.Top}\n" +
+                        $"Coords (t): {tn.self.Margin.Left}/{tn.self.Margin.Top}");
                     vehicle.Brake();
                     return true;
                 }
