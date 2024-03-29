@@ -93,6 +93,7 @@ namespace kbProdProj
 
         public void DieSafely()
         {
+            Debug.WriteLine($"DriveAI_{GetHashCode()}: Dying safely.");
             vehicle.Neutral();
             vehicle.Brake();
         }
