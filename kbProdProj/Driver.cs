@@ -91,6 +91,12 @@ namespace kbProdProj
             this.tn = tn;
         }
 
+        public void DieSafely()
+        {
+            vehicle.Neutral();
+            vehicle.Brake();
+        }
+
         public bool DriveAI()
         {
             Debug.WriteLine($"DriveAI_{GetHashCode()}: Navigation to {tn.id}");

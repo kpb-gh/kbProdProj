@@ -145,5 +145,14 @@ namespace kbProdProj
                 drivers.Add(d);
             }
         }
+
+        private void btn_killAllDrivers_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var i in drivers)
+            {
+                i.DieSafely();
+            }
+            drivers = new List<Driver>();
+        }
     }
 }
