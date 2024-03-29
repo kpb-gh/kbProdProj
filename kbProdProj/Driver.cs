@@ -18,11 +18,11 @@ namespace kbProdProj
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top), 
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top - 10), 
                 new Point((int)tn.self.Margin.Left, (int)tn.self.Margin.Top) };
-            int result = (int)(
+            double result = 180 * Math.PI * (
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
                     Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)
                 * Math.PI);
-            return result;
+            return (int)result;
         }
 
         internal static int Time_TurnToTarget(Node tn, Vehicle v)
