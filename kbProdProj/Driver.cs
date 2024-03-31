@@ -18,7 +18,7 @@ namespace kbProdProj
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top), 
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top - 10), 
                 new Point((int)tn.self.Margin.Left, (int)tn.self.Margin.Top) };
-            double result = 180 * Math.PI * (
+            double result = 180 * (
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
                     Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)
                 * Math.PI);
@@ -149,7 +149,7 @@ namespace kbProdProj
                     Debug.WriteLine($"DriveAI_{GetHashCode()}: Braking.");
                     vehicle.Brake();
                 }
-                else if (DriverMath.Time_MaxBrake(vehicle) > DriverMath.Time_ReachNode(tn, vehicle) + 10)
+                else if (DriverMath.Time_MaxBrake(vehicle) > DriverMath.Time_ReachNode(tn, vehicle) + 1)
                 {
                     Debug.WriteLine($"DriveAI_{GetHashCode()}: Accelerating.");
                     vehicle.Accel();

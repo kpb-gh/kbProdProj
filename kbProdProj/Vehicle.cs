@@ -88,6 +88,8 @@ namespace kbProdProj
             final /= 1.05;
             // transform angle
             Angle += dAngle;
+            if (Angle > 180) { Angle -= 360; }
+            else if (Angle < -180) { Angle += 360; }
             var tf = new RotateTransform(Angle, self.Width / 2, self.Height / 2);
             // calc velocity using final
             velocity[0] = 0 - Math.Round(final * Math.Sin(VehicleHelper.ConvertAngle(Angle)));
