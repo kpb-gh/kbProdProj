@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace kbProdProj
 {
@@ -70,6 +72,36 @@ namespace kbProdProj
             v.CurrentLocation = nodes[0];
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);
+            // region 3 - visualise roads
+            List<Line> roads = new List<Line>();
+            List<long> done_ids = new List<long>();
+            foreach (var node in nodes)
+            {
+                foreach (var target in node.targets) 
+                {
+                    if (done_ids.Contains(target.id)) { continue; } 
+                    Line road = new();
+                    road.X1 = node.self.Margin.Left;
+                    road.X2 = target.self.Margin.Left;
+                    road.Y1 = node.self.Margin.Top;
+                    road.Y2 = target.self.Margin.Top;
+                    Line road2 = new();
+                    double size = node.self.Width;
+                    road2.X1 = node.self.Margin.Left + size;
+                    road2.X2 = target.self.Margin.Left + size;
+                    road2.Y1 = node.self.Margin.Top + size;
+                    road2.Y2 = target.self.Margin.Top + size;
+                    road.Stroke = road2.Stroke = new SolidColorBrush(Colors.Black);
+                    road.StrokeThickness = road2.StrokeThickness = 2;
+                    roads.Add(road);
+                    roads.Add(road2);
+                }
+                done_ids.Add(node.id);
+            }
+            foreach (Line road in roads)
+            {
+                CarGrid.Children.Add(road);
+            }
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
