@@ -18,10 +18,9 @@ namespace kbProdProj
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top), 
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top - 10), 
                 new Point((int)tn.self.Margin.Left, (int)tn.self.Margin.Top) };
-            double result = 180 * (
+            double result = -180 * (
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
-                    Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)
-                * Math.PI);
+                    Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X) / Math.PI);
             return (int)result;
         }
 
@@ -113,8 +112,9 @@ namespace kbProdProj
                 return true; 
             }
             int velo = (int)Math.Sqrt((vehicle.velocity[0] * vehicle.velocity[0]) + (vehicle.velocity[1] * vehicle.velocity[1]));
-            if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 3 && (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 3))
-            {
+            //if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 10 || (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10))
+            if (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10)
+                {
                 route.RemoveAt(0);
                 if (route.Count > 0) 
                 {
