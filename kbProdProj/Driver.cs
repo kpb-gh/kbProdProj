@@ -86,8 +86,14 @@ namespace kbProdProj
             if (route == null)
             {
                 route = new List<Node> { sn };
-            }
+            } else { route.Add(tn); }
             this.tn = tn;
+            Debug.Write($"DriveAI_{GetHashCode()}: Initialising. Route: ");
+            for (int i = 0; i < route.Count; i++)
+            {
+                Debug.Write($"{route[i].id}, ");
+            }
+            Debug.Write("\n");
         }
 
         public void DieSafely()
@@ -105,6 +111,7 @@ namespace kbProdProj
             /// <summary>
             ///     Controls the Driver's assigned Vehicle automatically. Returns true when done, otherwise returns false.
             /// </summary>
+            tn = route[0];
             Debug.WriteLine($"DriveAI_{GetHashCode()}: Navigation to {tn.id}. Final: {route[^1].id}");
             if (route.Count == 0) 
             {
