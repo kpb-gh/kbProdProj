@@ -20,7 +20,8 @@ namespace kbProdProj
                 new Point((int)tn.self.Margin.Left, (int)tn.self.Margin.Top) };
             double result = -180 * (
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
-                    Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X) / Math.PI);
+                    Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)) / Math.PI;
+            while (result < 0) { result += 360; }
             return (int)result;
         }
 
