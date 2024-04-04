@@ -14,7 +14,7 @@ namespace kbProdProj
     {
         public Rectangle self = new();
         internal double[] velocity = new double[] { 0, 0 };
-        internal bool[] flags = new bool[8] { false, false,false,false,false,false,false,false }; // reversing, accel, brake, left, right, hazard, l_ind, r_ind
+        internal bool[] flags = new bool[8] { false, false, false, false, false, false, false, false }; // reversing, accel, brake, left, right, hazard, l_ind, r_ind
         public int TurnRate { get; } = 2;
         public int PwrRate { get; } = 2;
         public int MaxSpeed { get; } = 6;
@@ -22,7 +22,7 @@ namespace kbProdProj
         public int Angle { get; set; } = 0;
         public Node? CurrentLocation { get; set; }
 
-        public Vehicle(int[] c, Brush col, int type, bool o = false) 
+        public Vehicle(int[] c, Brush col, int type, bool o = false)
         {
             ovrrd = o;
             int[] size;
@@ -36,11 +36,11 @@ namespace kbProdProj
                     break;
                 case 2:
                     throw new NotImplementedException();
-                    size = new int[] { }; 
+                    size = new int[] { };
                     break;
                 case 3:
                     throw new NotImplementedException();
-                    size = new int[] { }; 
+                    size = new int[] { };
                     break;
                 default:
                     throw new ArgumentException("new Vehicle(..) needs valid type.");
@@ -60,16 +60,19 @@ namespace kbProdProj
 
         }
 
-        public void Update() {
+        public void Update()
+        {
             double final = Math.Sqrt((velocity[0] * velocity[0]) + velocity[1] * velocity[1]);
             int dAngle = 0;
             // engine
-            if (flags[1] && final < MaxSpeed) {
+            if (flags[1] && final < MaxSpeed)
+            {
                 final += PwrRate;
-            } else if (flags[2])
+            }
+            else if (flags[2])
             {
                 if (Math.Abs(final) <= PwrRate) { final = 0; }
-                else { final -= PwrRate; } 
+                else { final -= PwrRate; }
             }
             // reduce final due to extra drag on turn
             if ((flags[3] || flags[4]) && Math.Abs(final) > 0.2)
@@ -79,7 +82,8 @@ namespace kbProdProj
                 if (flags[3])
                 {
                     dAngle = -TurnRate;
-                } if (flags[4])
+                }
+                if (flags[4])
                 {
                     dAngle = TurnRate;
                 }
@@ -89,19 +93,20 @@ namespace kbProdProj
             // transform angle
             Angle += dAngle;
             if (Angle < 0) { Angle += 360; }
+            else if (Angle > 360) { Angle -= 360; }
             var tf = new RotateTransform(Angle, self.Width / 2, self.Height / 2);
             // calc velocity using final
             velocity[0] = 0 - Math.Round(final * Math.Sin(VehicleHelper.ConvertAngle(Angle)));
             velocity[1] = Math.Round(final * Math.Cos(VehicleHelper.ConvertAngle(Angle)));
             // transform velocity
-            self.Margin = new Thickness(self.Margin.Left + velocity[0], self.Margin.Top + velocity[1],0,0);
+            self.Margin = new Thickness(self.Margin.Left + velocity[0], self.Margin.Top + velocity[1], 0, 0);
             // transform final
             self.RenderTransform = tf;
         }
 
-        public void TurnLeft() { flags[3] = true; flags[4] = false; } 
-        public void TurnRight() { flags[4] = true; flags[3] = false; } 
-        public void Accel() { flags[1] = true; flags[2] = false; } 
+        public void TurnLeft() { flags[3] = true; flags[4] = false; }
+        public void TurnRight() { flags[4] = true; flags[3] = false; }
+        public void Accel() { flags[1] = true; flags[2] = false; }
         public void Brake() { flags[2] = true; flags[1] = false; }
         public void Neutral() { flags[1] = flags[2] = flags[3] = flags[4] = false; }
     }
