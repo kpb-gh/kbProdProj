@@ -123,6 +123,7 @@ namespace kbProdProj
             if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 10 && (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10))
             //if (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10)
                 {
+                vehicle.CurrentLocation = route[0];
                 route.RemoveAt(0);
                 if (route.Count > 0) 
                 {
