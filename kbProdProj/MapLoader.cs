@@ -13,6 +13,8 @@ namespace kbProdProj
     {
         public static List<Node> GetNodesFromFile(string path = "list.nodes")
         {
+            int numTargets;
+            List<string> data = new List<string>();
             List<Node> nodes = new List<Node> { new Node(0, 0, 0) };
             try
             {
@@ -20,14 +22,23 @@ namespace kbProdProj
                 {
                     for (int i = 1; !sr.EndOfStream; i++)
                     {
-                        string[] line = sr.ReadLine().Split(",");
+                        string line = sr.ReadLine();
                         if (line != null && line.Length > 0)
                         {
-                            nodes.Add(CreateNode(i, line, nodes));
+                            data.Add(line);
+                            nodes.Add(new Node(i, 0, 0));
                         }
                     }
                 }
             } catch (FileNotFoundException ex) { throw new FileNotFoundException($"File not found: {path}.", ex); }
+            for (int i = 0; i < data.Count; i++)
+            {
+                string[] line = data[i].Split(",");
+                if (line != null && line.Length > 0)
+                {
+                    nodes[i+1] = CreateNode(i+1, line, nodes);
+                }
+            }
             nodes[0].addTarget(nodes[1]);
             return nodes;
         }

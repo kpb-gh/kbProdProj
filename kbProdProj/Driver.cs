@@ -21,13 +21,18 @@ namespace kbProdProj
             double result = -180 * (
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
                     Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)) / Math.PI;
-            while (result < 0) { result += 360; }
+            while (result <= 0) { 
+                result += 360; 
+            }
             return (int)result;
         }
 
         internal static int Time_TurnToTarget(Node tn, Vehicle v)
         {
-            return (v.Angle - Angle_ToNode(tn,v)) / v.TurnRate;
+            int diff = v.Angle - Angle_ToNode(tn, v);
+            bool turnLeft = (diff + 360) % 360 < 180;
+            if (turnLeft) { return Math.Abs(diff / v.TurnRate); }
+            else { return -Math.Abs(diff / v.TurnRate); }
         }
         internal static int Time_Brake(Vehicle v)
         {
@@ -61,7 +66,7 @@ namespace kbProdProj
                     bool flag = false;
                     foreach (Node visited in route)
                     {
-                        if (visited.id == node.id) { flag = true; break; }
+                        if (visited.id == node.id) { flag = true; continue; }
                     }
                     if (flag) { continue; }
                     Debug.WriteLine($"Investigating {node.id}");
