@@ -18,13 +18,13 @@ namespace kbProdProj
         public double TurnRate { get; } = 2;
         public double PwrRate { get; } = 2;
         public double MaxSpeed { get; } = 6;
-        public bool ovrrd { get; }
+        public bool Ovrrd { get; }
         public double Angle { get; set; } = 0;
         public Node? CurrentLocation { get; set; }
 
         public Vehicle(int[] c, Brush col, int type, bool o = false)
         {
-            ovrrd = o;
+            Ovrrd = o;
             int[] size;
             switch (type)
             {

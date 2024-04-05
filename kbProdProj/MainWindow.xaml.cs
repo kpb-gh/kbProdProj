@@ -66,7 +66,7 @@ namespace kbProdProj
             }
             // region 2 - add vehicles
             Vehicle v = new Vehicle(new int[] { (int)nodes[0].self.Margin.Left, (int)nodes[0].self.Margin.Top }, new SolidColorBrush(Colors.Black), 0);
-            v.Angle = (int)DriverMath.Angle_ToNode(nodes[1],v); // spawn facing a valid route
+            v.Angle = DriverMath.Angle_ToNode(nodes[1],v); // spawn facing a valid route
             v.CurrentLocation = nodes[0];
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);
@@ -75,7 +75,7 @@ namespace kbProdProj
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             keyDown = e.Key;
-            if (vehicles[0].ovrrd)
+            if (vehicles[0].Ovrrd)
             {
                 if (keyDown == Key.Up) { vehicles[0].Accel(); }
                 else if (keyDown == Key.Down) { vehicles[0].Brake(); }
@@ -87,7 +87,7 @@ namespace kbProdProj
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             keyDown = Key.None;
-            if (vehicles[0].ovrrd) { vehicles[0].Neutral(); }
+            if (vehicles[0].Ovrrd) { vehicles[0].Neutral(); }
         }
 
         private void tNodeBox_TextChanged(object sender, TextChangedEventArgs e)
