@@ -13,6 +13,7 @@ namespace kbProdProj
     {
         public static List<Node> GetNodesFromFile(string path = "list.nodes")
         {
+            List<string> data = new List<string>();
             List<Node> nodes = new List<Node> { new Node(0, 0, 0) };
             try
             {
@@ -20,19 +21,28 @@ namespace kbProdProj
                 {
                     for (int i = 1; !sr.EndOfStream; i++)
                     {
-                        string[] line = sr.ReadLine().Split(",");
+                        string line = sr.ReadLine();
                         if (line != null && line.Length > 0)
                         {
-                            nodes.Add(CreateNode(i, line, nodes));
+                            data.Add(line);
+                            nodes.Add(new Node(i, 0, 0));
                         }
                     }
                 }
             } catch (FileNotFoundException ex) { throw new FileNotFoundException($"File not found: {path}.", ex); }
+            for (int i = 0; i < data.Count; i++)
+            {
+                string[] line = data[i].Split(",");
+                if (line != null && line.Length > 0)
+                {
+                    nodes[i+1] = CreateNode(i+1, line, nodes);
+                }
+            }
             nodes[0].addTarget(nodes[1]);
             return nodes;
         }
 
-        private static Node CreateNode(long id, string[] line, List<Node> nodes)
+        private static Node CreateNode(int id, string[] line, List<Node> nodes)
         {
             int x = int.Parse(line[0]); int y = int.Parse(line[1]);
             return new Node(id, x*3, y*3, GetTargetsFromLine(line, nodes));
@@ -44,7 +54,7 @@ namespace kbProdProj
             List<Node> targets = new List<Node>();
             for (int i = 2; i < line.Length; i++)
             {
-                long tgt = long.Parse(line[i]);
+                int tgt = int.Parse(line[i]);
                 var b = nodes.Find(a => a.id == tgt);
                 if (b != null) {  targets.Add(b); }
             }

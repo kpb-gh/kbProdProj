@@ -75,7 +75,7 @@ namespace kbProdProj
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             keyDown = e.Key;
-            if (vehicles[0].ovrrd)
+            if (vehicles[0].Ovrrd)
             {
                 if (keyDown == Key.Up) { vehicles[0].Accel(); }
                 else if (keyDown == Key.Down) { vehicles[0].Brake(); }
@@ -87,7 +87,7 @@ namespace kbProdProj
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             keyDown = Key.None;
-            if (vehicles[0].ovrrd) { vehicles[0].Neutral(); }
+            if (vehicles[0].Ovrrd) { vehicles[0].Neutral(); }
         }
 
         private void tNodeBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -141,7 +141,7 @@ namespace kbProdProj
             }
             else
             {
-                Driver d = new Driver(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n));
+                Driver d = new Driver(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n), nodes);
                 drivers.Add(d);
             }
         }
