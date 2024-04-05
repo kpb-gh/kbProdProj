@@ -15,9 +15,9 @@ namespace kbProdProj
         public Rectangle self = new();
         internal double[] velocity = new double[] { 0, 0 };
         internal bool[] flags = new bool[8] { false, false, false, false, false, false, false, false }; // reversing, accel, brake, left, right, hazard, l_ind, r_ind
-        public int TurnRate { get; } = 2;
-        public int PwrRate { get; } = 2;
-        public int MaxSpeed { get; } = 6;
+        public double TurnRate { get; } = 2;
+        public double PwrRate { get; } = 2;
+        public double MaxSpeed { get; } = 6;
         public bool ovrrd { get; }
         public double Angle { get; set; } = 0;
         public Node? CurrentLocation { get; set; }
