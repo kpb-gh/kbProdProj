@@ -158,7 +158,7 @@ namespace kbProdProj
                 Debug.WriteLine($"DriveAI_{GetHashCode()}: Done arrival.");
                 return true; 
             }
-            int velo = (int)Math.Sqrt((vehicle.velocity[0] * vehicle.velocity[0]) + (vehicle.velocity[1] * vehicle.velocity[1]));
+            double velo = Math.Sqrt((vehicle.velocity[0] * vehicle.velocity[0]) + (vehicle.velocity[1] * vehicle.velocity[1]));
             if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 10 && (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10))
             {
                 vehicle.CurrentLocation = route[0];
