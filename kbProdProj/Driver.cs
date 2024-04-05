@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -58,13 +59,16 @@ namespace kbProdProj
             ///Returns a route that connects nodes via their targets. Map is only passed in to correct inconsistencies, and is ref to reduce strain of passing a large variable
             ///</summary>
             if (route == null) { route = new List<Node> { cn }; }
-            else { route.Add(cn); }
+            else 
+            {
+                cn = map[cn.id];
+                route.Add(cn);
+            }
             if (deadNodes == null) { deadNodes = new List<Node>(); }
             else if (deadNodes.Contains(cn)) { return null; }
             if (cn.id == tn.id) { return route; }
             else
             {
-                cn = map[cn.id];
                 foreach (var node in cn.targets)
                 {
                     bool flag = false;
@@ -98,7 +102,7 @@ namespace kbProdProj
             if (route == null)
             {
                 route = new List<Node> { sn };
-            } else { route.Add(tn); }
+            } 
             this.tn = tn;
             Debug.Write($"DriveAI_{GetHashCode()}: Initialising. Route: ");
             for (int i = 0; i < route.Count; i++)
