@@ -11,7 +11,7 @@ namespace kbProdProj
 {
     internal static class DriverMath
     {
-        internal static int Angle_ToNode(Node tn, Vehicle v)
+        internal static double Angle_ToNode(Node tn, Vehicle v)
         {
             if (tn == null || v == null) return 0;
             Point[] points = new Point[3] { 
@@ -24,32 +24,32 @@ namespace kbProdProj
             while (result <= 0) { 
                 result += 360; 
             }
-            return (int)result;
+            return result;
         }
 
-        internal static int Time_TurnToTarget(Node tn, Vehicle v)
+        internal static double Time_TurnToTarget(Node tn, Vehicle v)
         {
-            int diff = v.Angle - Angle_ToNode(tn, v);
+            double diff = v.Angle - Angle_ToNode(tn, v);
             bool turnLeft = (diff + 360) % 360 < 180;
             if (turnLeft) { return Math.Abs(diff / v.TurnRate); }
             else { return -Math.Abs(diff / v.TurnRate); }
         }
-        internal static int Time_Brake(Vehicle v)
+        internal static double Time_Brake(Vehicle v)
         {
-            int final = (int)(Math.Sqrt((v.velocity[0] * v.velocity[0]) + v.velocity[1] * v.velocity[1]));
+            double final = Math.Sqrt((v.velocity[0] * v.velocity[0]) + v.velocity[1] * v.velocity[1]);
             return (final / v.PwrRate) - 1;
         }
 
-        internal static int Time_MaxBrake(Vehicle v)
+        internal static double Time_MaxBrake(Vehicle v)
         {
             return (v.MaxSpeed / v.PwrRate) - 1;
         }
 
-        internal static int Time_ReachNode(Node tn, Vehicle v)
+        internal static double Time_ReachNode(Node tn, Vehicle v)
         {
-            double tv = (int)(v.velocity[0] / Math.Abs(v.self.Margin.Left - tn.self.Margin.Left));
-            double ty = (int)(v.velocity[1] / Math.Abs(v.self.Margin.Top - tn.self.Margin.Top));
-            return (int)Math.Sqrt((tv * tv) + (ty * ty));
+            double tv = v.velocity[0] / Math.Abs(v.self.Margin.Left - tn.self.Margin.Left);
+            double ty = v.velocity[1] / Math.Abs(v.self.Margin.Top - tn.self.Margin.Top);
+            return Math.Sqrt((tv * tv) + (ty * ty));
         }
 
         internal static List<Node>? FindRoute(Node tn, Node cn, in List<Node> map, List<Node>? deadNodes = null, List<Node> ? route = null)
@@ -180,7 +180,7 @@ namespace kbProdProj
             }
             else
             {
-                int t = DriverMath.Time_TurnToTarget(tn, vehicle);
+                double t = DriverMath.Time_TurnToTarget(tn, vehicle);
                 if (Math.Abs(t) > 2)
                 {
                     if (t < 0) { TurnLeft(); }

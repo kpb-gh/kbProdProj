@@ -13,7 +13,7 @@ namespace kbProdProj
         {
             return (int)(180 * rads / PI);
         }
-        public static double ConvertAngle(int degs)
+        public static double ConvertAngle(double degs)
         {
             return PI * degs / 180;
         }

@@ -19,7 +19,7 @@ namespace kbProdProj
         public int PwrRate { get; } = 2;
         public int MaxSpeed { get; } = 6;
         public bool ovrrd { get; }
-        public int Angle { get; set; } = 0;
+        public double Angle { get; set; } = 0;
         public Node? CurrentLocation { get; set; }
 
         public Vehicle(int[] c, Brush col, int type, bool o = false)
@@ -63,7 +63,7 @@ namespace kbProdProj
         public void Update()
         {
             double final = Math.Sqrt((velocity[0] * velocity[0]) + velocity[1] * velocity[1]);
-            int dAngle = 0;
+            double dAngle = 0;
             // engine
             if (flags[1] && final < MaxSpeed)
             {

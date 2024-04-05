@@ -66,7 +66,7 @@ namespace kbProdProj
             }
             // region 2 - add vehicles
             Vehicle v = new Vehicle(new int[] { (int)nodes[0].self.Margin.Left, (int)nodes[0].self.Margin.Top }, new SolidColorBrush(Colors.Black), 0);
-            v.Angle = DriverMath.Angle_ToNode(nodes[1],v); // spawn facing a valid route
+            v.Angle = (int)DriverMath.Angle_ToNode(nodes[1],v); // spawn facing a valid route
             v.CurrentLocation = nodes[0];
             vehicles.Add(v);
             CarGrid.Children.Add(v.self);

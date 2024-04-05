@@ -13,7 +13,6 @@ namespace kbProdProj
     {
         public static List<Node> GetNodesFromFile(string path = "list.nodes")
         {
-            int numTargets;
             List<string> data = new List<string>();
             List<Node> nodes = new List<Node> { new Node(0, 0, 0) };
             try
