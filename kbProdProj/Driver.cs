@@ -61,7 +61,7 @@ namespace kbProdProj
             else { route.Add(cn); }
             if (deadNodes == null) { deadNodes = new List<Node>(); }
             else if (deadNodes.Contains(cn)) { return null; }
-            if (cn == tn) { return route; }
+            if (cn.id == tn.id) { return route; }
             else
             {
                 cn = map[cn.id];
@@ -194,7 +194,7 @@ namespace kbProdProj
                 {
                     Brake();
                 }
-                else if (DriverMath.Time_MaxBrake(vehicle) > DriverMath.Time_ReachNode(tn, vehicle) + 1)
+                else if (DriverMath.Time_MaxBrake(vehicle) > DriverMath.Time_ReachNode(tn, vehicle) + 1 || velo < vehicle.MaxSpeed / 10)
                 {
                     Accel();
                 }
