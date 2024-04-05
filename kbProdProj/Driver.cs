@@ -150,12 +150,6 @@ namespace kbProdProj
             vehicle.Brake();
         }
 
-        public void DieSafely()
-        {
-            vehicle.Neutral();
-            vehicle.Brake();
-        }
-
         public bool DriveAI()
         {
             /// <summary>
