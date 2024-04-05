@@ -43,7 +43,7 @@ namespace kbProdProj
             return nodes;
         }
 
-        private static Node CreateNode(long id, string[] line, List<Node> nodes)
+        private static Node CreateNode(int id, string[] line, List<Node> nodes)
         {
             int x = int.Parse(line[0]); int y = int.Parse(line[1]);
             return new Node(id, x*3, y*3, GetTargetsFromLine(line, nodes));
@@ -55,7 +55,7 @@ namespace kbProdProj
             List<Node> targets = new List<Node>();
             for (int i = 2; i < line.Length; i++)
             {
-                long tgt = long.Parse(line[i]);
+                int tgt = int.Parse(line[i]);
                 var b = nodes.Find(a => a.id == tgt);
                 if (b != null) {  targets.Add(b); }
             }

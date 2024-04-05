@@ -13,7 +13,7 @@ namespace kbProdProj
     class Node
     {
         public Rectangle self = new();
-        public long id { get; } // id=0 is reserved for root node
+        public int id { get; } // id=0 is reserved for root node
         private int x { get; }
         private int y { get; }
         public bool active { get; set; }
@@ -31,7 +31,7 @@ namespace kbProdProj
 
         }
 
-        public Node(long id, int x, int y, List<Node> target)
+        public Node(int id, int x, int y, List<Node> target)
         {
             this.id = id;
             this.x = (x * 4); this.y = (y * 4);
@@ -41,7 +41,7 @@ namespace kbProdProj
                 addTarget(t);
             }
         }
-        public Node(long id, int x, int y)
+        public Node(int id, int x, int y)
         {
             this.id = id;
             this.x = (x * 4); this.y = (y * 4);

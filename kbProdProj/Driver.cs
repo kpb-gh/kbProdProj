@@ -52,8 +52,11 @@ namespace kbProdProj
             return (int)Math.Sqrt((tv * tv) + (ty * ty));
         }
 
-        internal static List<Node>? FindRoute(Node tn, Node cn, List<Node>? route = null, List<Node>? deadNodes = null)
+        internal static List<Node>? FindRoute(Node tn, Node cn, in List<Node> map, List<Node>? deadNodes = null, List<Node> ? route = null)
         {
+            ///<summary>
+            ///Returns a route that connects nodes via their targets. Map is only passed in to correct inconsistencies, and is ref to reduce strain of passing a large variable
+            ///</summary>
             if (route == null) { route = new List<Node> { cn }; }
             else { route.Add(cn); }
             if (deadNodes == null) { deadNodes = new List<Node>(); }
@@ -61,6 +64,7 @@ namespace kbProdProj
             if (cn == tn) { return route; }
             else
             {
+                cn = map[cn.id];
                 foreach (var node in cn.targets)
                 {
                     bool flag = false;
@@ -70,12 +74,12 @@ namespace kbProdProj
                     }
                     if (flag) { continue; }
                     Debug.WriteLine($"Investigating {node.id}");
-                    route = FindRoute(tn, node, route, deadNodes);
+                    route = FindRoute(tn, node, map, deadNodes, route);
                     if (route == null)
                     {
                         deadNodes.Add(node);
                         continue;
-                    } 
+                    }
                 }
                 return route;
             }
@@ -87,10 +91,10 @@ namespace kbProdProj
         private List<Node> route { get; set; }
         private Node tn { get; set; }
 
-        public Driver(Vehicle vehicle, Node sn, Node tn)
+        public Driver(Vehicle vehicle, Node sn, Node tn, in List<Node> map)
         {
             this.vehicle = vehicle;
-            route = DriverMath.FindRoute(tn, sn);
+            route = DriverMath.FindRoute(tn, sn, map);
             if (route == null)
             {
                 route = new List<Node> { sn };
