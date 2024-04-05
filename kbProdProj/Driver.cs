@@ -19,21 +19,21 @@ namespace kbProdProj
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top), 
                 new Point((int)v.self.Margin.Left, (int)v.self.Margin.Top - 10), 
                 new Point((int)tn.self.Margin.Left, (int)tn.self.Margin.Top) };
-            double result = -180 * (
+            double result = 180 * (
                 Math.Atan2(points[2].Y - points[0].Y, points[2].X - points[0].X) -
                     Math.Atan2(points[1].Y - points[0].Y, points[1].X - points[0].X)) / Math.PI;
             while (result <= 0) { 
                 result += 360; 
             }
-            return result;
+            return result - 180;
         }
 
         internal static double Time_TurnToTarget(Node tn, Vehicle v)
         {
             double diff = v.Angle - Angle_ToNode(tn, v);
             bool turnLeft = (diff + 360) % 360 < 180;
-            if (turnLeft) { return Math.Abs(diff / v.TurnRate); }
-            else { return -Math.Abs(diff / v.TurnRate); }
+            if (turnLeft) { return -Math.Abs(diff / v.TurnRate); }
+            else { return Math.Abs(diff / v.TurnRate); }
         }
         internal static double Time_Brake(Vehicle v)
         {
