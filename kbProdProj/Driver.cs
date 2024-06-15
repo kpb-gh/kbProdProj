@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -74,7 +75,7 @@ namespace kbProdProj
                     bool flag = false;
                     foreach (Node visited in route)
                     {
-                        if (visited.id == node.id) { flag = true; continue; }
+                        if (visited.id == node.id) { flag = true; break; }
                     }
                     if (flag) { continue; }
                     Debug.WriteLine($"Investigating {node.id}");
@@ -85,6 +86,7 @@ namespace kbProdProj
                         continue;
                     }
                 }
+                if (route != null && route[^1].id != tn.id) { route.Remove(route[^1]); }
                 return route;
             }
         }
@@ -95,6 +97,8 @@ namespace kbProdProj
         private List<Node> route { get; set; }
         private Node tn { get; set; }
 
+        private StreamWriter? SWriter { get; }
+
         public Driver(Vehicle vehicle, Node sn, Node tn, in List<Node> map)
         {
             this.vehicle = vehicle;
@@ -104,6 +108,7 @@ namespace kbProdProj
                 route = new List<Node> { sn };
             } 
             this.tn = tn;
+            SWriter = SetupWriter();
             Debug.Write($"DriveAI_{GetHashCode()}: Initialising. Route: ");
             for (int i = 0; i < route.Count; i++)
             {
@@ -112,31 +117,50 @@ namespace kbProdProj
             Debug.Write("\n");
         }
 
+        public StreamWriter? SetupWriter()
+        {
+            string driveAi = $"DriveAI_{GetHashCode()}.log";
+            File.Create(driveAi); 
+            try 
+            { 
+                return new StreamWriter(driveAi);
+            } catch 
+            { 
+                return null; 
+            }
+        }
+
+        public void DWrite(string s)
+        {
+            SWriter?.WriteLine(s);
+            Debug.WriteLine($"DriveAI_{GetHashCode()}: {s}");
+        }
+
         private void TurnLeft()
         {
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Left."); 
+            // DWrite("Left."); 
             vehicle.TurnLeft();
         }
         private void TurnRight()
         {
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Right.");
+            // DWrite("Right.");
             vehicle.TurnRight();
         }
         private void Brake()
         {
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Braking.");
+            // DWrite("Braking.");
             vehicle.Brake();
         }
 
         private void Accel()
         {
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Accelerating.");
+            // DWrite("Accelerating.");
             vehicle.Accel();
         }
 
         private void Neutral()
         {
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Neutral.");
+            // DWrite("Neutral.");
             vehicle.Neutral();
         }
 
@@ -145,9 +169,10 @@ namespace kbProdProj
             /// <summary>
             ///     Neutralises vehicle steering and forces it to stop. To be used before Driver is killed.
             /// </summary>
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Dying safely.");
+            DWrite("Dying safely.");
             vehicle.Neutral();
             vehicle.Brake();
+            SWriter?.Close();
         }
 
         public bool DriveAI()
@@ -155,13 +180,13 @@ namespace kbProdProj
             /// <summary>
             ///     Controls the Driver's assigned Vehicle automatically. Returns true when done, otherwise returns false.
             /// </summary>
-            tn = route[0];
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Navigation to {tn.id}. Final: {route[^1].id}");
+            // DWrite($"Navigation to {tn.id}. Final: {route[^1].id}");
             if (route.Count == 0) 
             {
-                Debug.WriteLine($"DriveAI_{GetHashCode()}: Done arrival.");
+                DWrite("Done arrival.");
                 return true; 
             }
+            else { tn = route[0]; }
             double velo = Math.Sqrt((vehicle.velocity[0] * vehicle.velocity[0]) + (vehicle.velocity[1] * vehicle.velocity[1]));
             if (Math.Abs(vehicle.self.Margin.Top - tn.self.Margin.Top) < 10 && (Math.Abs(vehicle.self.Margin.Left - tn.self.Margin.Left) < 10))
             {
@@ -170,14 +195,15 @@ namespace kbProdProj
                 if (route.Count > 0) 
                 {
                     tn = route[0];
-                    Debug.WriteLine($"DriveAI_{GetHashCode()}: New target: {tn.id}");
+                    DWrite($"New target: {tn.id}");
                 }
                 else 
                 {
-                    Debug.WriteLine(
-                        $"DriveAI_{GetHashCode()}: Done proximity.\n" +
+                    DWrite(
+                        "Done proximity.\n" +
                         $"Coords (v): {vehicle.self.Margin.Left}/{vehicle.self.Margin.Top}\n" +
                         $"Coords (t): {tn.self.Margin.Left}/{tn.self.Margin.Top}");
+                    SWriter?.Close();
                     vehicle.Brake();
                     return true;
                 }
@@ -203,7 +229,7 @@ namespace kbProdProj
                     Accel();
                 }
             }
-            Debug.WriteLine($"DriveAI_{GetHashCode()}: Ongoing.");
+            // DWrite("Ongoing");
             return false;
         }
     }
