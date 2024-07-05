@@ -23,7 +23,7 @@ namespace kbProdProj
         {
             self.Margin = new Thickness(x,y, 0, 0);
             self.Width = 30; self.Height = 30;
-            self.Fill = new SolidColorBrush(Colors.Transparent);
+            self.Fill = new SolidColorBrush(Colors.White);
             self.StrokeThickness = 0.5;
             self.Stroke = new SolidColorBrush(Colors.Black);
             self.HorizontalAlignment = HorizontalAlignment.Center;
