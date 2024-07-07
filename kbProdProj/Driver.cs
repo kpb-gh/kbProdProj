@@ -93,11 +93,11 @@ namespace kbProdProj
     }
 
     internal class Driver {
-        private Vehicle vehicle;
-        private List<Node> route { get; set; }
-        private Node tn { get; set; }
+        protected Vehicle vehicle;
+        protected List<Node> route { get; set; }
+        protected Node tn { get; set; }
 
-        private StreamWriter? SWriter { get; }
+        protected StreamWriter? SWriter { get; set; }
 
         public Driver(Vehicle vehicle, Node sn, Node tn, in List<Node> map)
         {
@@ -120,7 +120,8 @@ namespace kbProdProj
         public StreamWriter? SetupWriter()
         {
             string driveAi = $"DriveAI_{GetHashCode()}.log";
-            File.Create(driveAi); 
+            try { File.Create(driveAi); }
+            catch (IOException ex) { DWrite($"WARNING: Streamwriter failed to initialise! DUMP: \n{ex.Message}"); }
             try 
             { 
                 return new StreamWriter(driveAi);
@@ -136,29 +137,29 @@ namespace kbProdProj
             Debug.WriteLine($"DriveAI_{GetHashCode()}: {s}");
         }
 
-        private void TurnLeft()
+        protected void TurnLeft()
         {
             // DWrite("Left."); 
             vehicle.TurnLeft();
         }
-        private void TurnRight()
+        protected void TurnRight()
         {
             // DWrite("Right.");
             vehicle.TurnRight();
         }
-        private void Brake()
+        protected void Brake()
         {
             // DWrite("Braking.");
             vehicle.Brake();
         }
 
-        private void Accel()
+        protected void Accel()
         {
             // DWrite("Accelerating.");
             vehicle.Accel();
         }
 
-        private void Neutral()
+        protected void Neutral()
         {
             // DWrite("Neutral.");
             vehicle.Neutral();
