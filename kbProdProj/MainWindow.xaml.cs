@@ -26,6 +26,7 @@ namespace kbProdProj
         private List<Vehicle> vehicles = new List<Vehicle>();
         private List<Node> nodes = MapLoader.GetNodesFromFile();
         private List<Driver> drivers = new List<Driver>();
+        // private List<DriverExtended> drivers = new List<DriverExtended>(); // refer to your custom driver here
         private Key keyDown = Key.None;
         
         public MainWindow()
@@ -40,7 +41,9 @@ namespace kbProdProj
         private void dTimer_Tick(object sender, EventArgs e)
         {
             List<Driver> doneDrivers = new List<Driver>();
+            // List<DriverExtended> doneDrivers = new List<DriverExtended>(); // refer to your custom driver here
             foreach (Driver d in drivers)
+            // foreach (DriverExtended d in drivers) // refer to your custom driver here
             {
                 if (d.DriveAI())
                 {
@@ -52,6 +55,7 @@ namespace kbProdProj
                 v.Update();
             }
             foreach (Driver item in doneDrivers)
+            // foreach (DriverExtended item in doneDrivers) // refer to your custom driver here
             {
                 drivers.Remove(item);
             }
@@ -142,7 +146,7 @@ namespace kbProdProj
             else
             {
                 Driver d = new Driver(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n), nodes);
-                // Driver d = new DriverExtended(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n), nodes);
+                // DriverExtended d = new DriverExtended(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n), nodes); // refer to your custom driver here
                 drivers.Add(d);
             }
         }
@@ -154,6 +158,7 @@ namespace kbProdProj
                 i.DieSafely();
             }
             drivers = new List<Driver>();
+            // drivers = new List<DriverExtended>(); // refer to your custom driver here
         }
     }
 }

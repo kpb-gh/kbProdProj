@@ -120,7 +120,8 @@ namespace kbProdProj
         public StreamWriter? SetupWriter()
         {
             string driveAi = $"DriveAI_{GetHashCode()}.log";
-            File.Create(driveAi); 
+            try { File.Create(driveAi); }
+            catch (IOException ex) { DWrite($"WARNING: Streamwriter failed to initialise! DUMP: \n{ex.Message}"); }
             try 
             { 
                 return new StreamWriter(driveAi);
