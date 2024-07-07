@@ -142,6 +142,7 @@ namespace kbProdProj
             else
             {
                 Driver d = new Driver(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n), nodes);
+                // Driver d = new DriverExtended(vehicles[v], vehicles[v].CurrentLocation, nodes.First(a => a.id == n), nodes);
                 drivers.Add(d);
             }
         }

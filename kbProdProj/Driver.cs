@@ -49,8 +49,8 @@ namespace kbProdProj
 
         internal static double Time_ReachNode(Node tn, Vehicle v)
         {
-            double tv =  Math.Abs(v.self.Margin.Left - tn.self.Margin.Left) / v.velocity[0];
-            double ty = Math.Abs(v.self.Margin.Top - tn.self.Margin.Top) / v.velocity[1];
+            double tv = v.velocity[0] / Math.Abs(v.self.Margin.Left - tn.self.Margin.Left);
+            double ty = v.velocity[1] / Math.Abs(v.self.Margin.Top - tn.self.Margin.Top);
             return Math.Sqrt((tv * tv) + (ty * ty));
         }
 
